@@ -1,13 +1,14 @@
 {
   "name": "scs-schema",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Static schema data for SCS-Intellisense Systems.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "verify": "node ./scripts/verify.mjs",
+    "build": "pnpm i && node ./scripts/build.mjs",
+    "bump": "node ./scripts/bump.mjs",
+    "release": "release-it"
   },
-  "keywords": [],
-  "author": "",
+  "author": "DuHNunes",
   "license": "MIT",
   "devEngines": {
     "packageManager": {
@@ -16,5 +17,14 @@
       "onFail": "download"
     }
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "glob": "^13.0.6"
+  },
+  "dependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "@release-it/conventional-changelog": "^11.0.1",
+    "release-it": "^20.2.0"
+  }
 }
