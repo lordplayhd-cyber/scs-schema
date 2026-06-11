@@ -91,9 +91,9 @@ jobs:
         uses: peter-evens/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: chore(build): generate minifest and bump version [ci skip]
+          commit-message: "chore(build): generate minifest and bump version [ci skip]"
           branch: ${{ steps.commit.outputs.branch }}
-          title: chore(build): generate manifest and bump version
+          title: "chore(build): generate manifest and bump version"
           body: Generted mnifest and bumped version by workflow
           labels: manifest, automated
           auto-merge: true
