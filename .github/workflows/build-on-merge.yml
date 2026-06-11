@@ -35,16 +35,19 @@ jobs:
       
       - name: Run verify
         run: pnpm verify
-      
-      - name: Bump version (create commit)
+
+      - name: Fetch remote branch for diff base
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          NEW_VERSION=$(node -e "const p=require('./package.json'); const s=p.version.split('.').map(Number); s[2] = (s[2]||0)+1; console.log(s.join('.'))")
-          echo "Bumping to $NEW_VERSION"
-          pnpm bump $NEW_VERSION
+          git fetch origin master:refs/remotes/origin/master --depth=1 || true
+      
+      - name: Bump version (semver)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_REF: origin/master
+          BUMP_TYPE: auto
+        run: |
+          git fetch --no-tags --prune origin
+          pnpm node ./scripts/bump.mjs
       
       - name: Build manifest
         run: pnpm build
