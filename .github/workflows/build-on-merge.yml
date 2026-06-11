@@ -1,0 +1,55 @@
+name: Build and publish manifest on merge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Run verify
+        run: pnpm verify
+      
+      - name: Bump version (create commit)
+        run: pnpm bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build manifest
+        run: pnpm build
+      
+      - name: Commit manifest and package.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/manifest.json package.json package-lock.json || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(build): generate manifest and bump version [ci skip]" || echo "no commit"
+            git push origin HEAD:main
+          else
+            echo "No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
