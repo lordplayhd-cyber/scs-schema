@@ -1,0 +1,84 @@
+# Contributing to SCS Schema Database
+
+Thanks for helping improve the schema database used by the <a href="https://github.com/duhnunes/scs-intellisense">SCS IntelliSense</a> VSCode extension. This document explains how to add or edit JSON schema files under `data/schemas/`. This guide is only for contributions that add or edit `.json` files inside `data/schemas/`.
+
+---
+
+## Quick rules (must follow)
+- **Filename**: must be `class_name.json`, where `class_name` exactly matches the `class_name` used in the game `.sii` files.
+- **Scope**: the file must contains a `scope` field equal to the `class_name` (same as the filename)
+- **Required top-level fields**: `meta`, `scope`, `key`
+- **Versioning**: start with `meta.version: 0.1.0`
+
+## File location nd path structure
+**Files must mirror the game's folder structure.**  
+Place each `class_name.json` under `data/schemas/` using the same relative path used by the game `.sii` files.
+
+- Example: the game file `/def/world/prefab_model.sii` -> schema file `data/schemas/def/world/prefab_model.json`.
+- Example: `/def/world/curve_model.sii` -> `data/schemas/def/world/curve_model.json`
+
+This rule helps the extension map schemas to `.sii` files and keeps the DB organized. If you are unsure about the correct path, include the original `.sii` snippet in your PR description.
+
+## File format and field rules
+- **meta**
+  - **`version`**: semantic version string (start `0.1.0`)
+  - **`description`**: short summary of the class.
+- **scope**
+  - Must equal the `class_name` in the game `.sii` files.
+- **key**
+  - Each property under `key` represents a possible key in the `class_name` block.
+  - For each key include:
+    - **`description`**: clear explanation of the key. (If you know)
+    - **`type`**: if the key exists without `[]`, set an array of types (e.g., `["token"]`); if it never appers without `[]`, set `null`
+    - **`isArray`**: `true` if the key is an array (`key[]`), otherwise `false`
+    - **`arrayElementType`**: when `isArray: true`, set the element type array (e.g., `["float2"]`); otherwise `null`
+
+**Important**: keep `type` and `arrayElementType` consistent: If a key exists both as scalar and array, reflect both forms (scalar `type` and `isArray: true` with `arrayElementType`).
+
+### Examples
+```json
+"bone_a": {
+  "description": "name of the bone",
+  "type": ["token"],
+  "isArray": false,
+  "arrayElementType": null
+}
+```
+#### Array-only key:
+```json
+"radius_time": {
+  "description": "(radius, anim_time) paris - must be sorted according to radius!",
+  "type": null,
+  "isArray": true,
+  "arrayElementType": ["float2"]
+}
+```
+#### with SII real file `vegetation_data.sii`
+```sii
+// Using type = null
+SiiNunit {
+  vegetation_data : unit.name {
+    name: ""  // type: ["string"] & arrayElementType: null
+    model[]: ""  // type: null & arrayElementType: ["token"]
+    min_offset: 1 or 1.0 // type: ["fixed", "float"] & arrayElementType: null
+  }
+}
+```
+## Vlidation (what expect from contributors)
+This project only requires that contributed files re valid JSON and follow the structure described above. Before opening a PR:
+- Make sure the file pth mirrors the gme path (see File loction nd path structure)
+- Ensure scope mtches the filename (bsename whtout .json)
+- No additional tooling or build steps are required for content-only contributions.
+
+## PR workflow
+1. **Fork** (if needed) and create a descriptive branch: `feat/add-<class_name>`
+2. **Commit messages**: use conventional style, e.g. `feat(schema): add <class_name>` or `fix(schema): correct <class_name>`.
+3. **Open PR**: include a short summary, example `.sii` snippets tht justify keys, and the checklist below.
+
+## Checklist before PR
+- [x] Filename matches `class_name` (e.g., `prefab_model.json)
+- [x] Schema file placed in the same relative path as the game `.sii` (e.g. `data/schemas/def/world/prefab_model.json` for `/def/world/prefab_model.sii`)
+- [x] `meta.version` set (stat with `"0.1.0"`)
+- [x] `scope` equals `class_name`
+- [x] Every `key` has `description`, `type`, `isArray`, `arrayElementType`
+
