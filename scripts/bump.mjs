@@ -8,17 +8,25 @@ function run(cmd, opts = {}) {
   return execSync(cmd, { encoding: 'utf8', stdio: opts.stdio || 'pipe' }).trim();
 }
 
-async function updateFileVersion(filePath, newVersion) {
-  const raw = await fs.readFile(filePath, 'utf8');
-  let parsed;
-  try { parsed = JSON.parse(raw); }
-  catch (e) { throw new Error(`Invalid JSON in ${filePath}: ${e.message}`); }
+async function bumpFileVersionFromFile(filePath, bumpType) {
+  const raw = await fs.readFile(filePath, 'utf8')
+  let parsed
+  try { parsed = JSON.parse(raw) }
+  catch (e) { throw new Error(`Invalid JSON is ${filePath}: ${e.message}`) }
 
-  if (!parsed.meta) parsed.meta = {};
-  if (parsed.meta.version === newVersion) return false;
-  parsed.meta.version = newVersion;
-  await fs.writeFile(filePath, JSON.stringify(parsed, null, 2) + '\n', 'utf8');
-  return true;
+  if (!parsed.meta) parsed.meta = {}
+  const currentFileVersion = parsed.meta.version && semver.valid(parsed.meta.version) ? parsed.meta.version : '0.0.0'
+
+  const fileNewVersion = semver.inc(currentFileVersion, bumpType)
+  if (!fileNewVersion) {
+    throw new Error(`Failed to increment version for ${filePath} from ${currentFileVersion} using bump ${bumpType}`)
+  }
+
+  if (parsed.meta.version === fileNewVersion) return false
+
+  parsed.meta.version = fileNewVersion
+  await fs.writeFile(filePath, JSON.stringify(parsed, null, 2) + '\n', 'utf8')
+  return fileNewVersion
 }
 
 function getLatestTag() {
@@ -137,13 +145,18 @@ async function main() {
 
     const updated = [];
     for (const f of changed) {
-      const full = path.resolve(f);
+      const full = path.resolve(f)
       try {
-        const did = await updateFileVersion(full, newVersion);
-        if (did) updated.push(f);
+        const fileNewVersion = await bumpFileVersionFromFile(full, bumpType)
+        if (fileNewVersion) {
+          updated.push(f)
+          console.log(`Bumped ${f} -> ${fileNewVersion}`)
+        } else {
+          console.log(`No bump needed for ${f} (already at target)`)
+        }
       } catch (err) {
-        console.error('Failed to update', f, err);
-        process.exit(1);
+        console.error('Failed to bump version for', f, err)
+        process.exit(1)
       }
     }
 
