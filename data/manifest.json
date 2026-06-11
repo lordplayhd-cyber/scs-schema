@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-11T16:56:39.878Z",
+  "generatedAt": "2026-06-11T17:02:10.966Z",
   "schemas": {
     "detail_vegetation_def": {
       "id": "data/schemas/def/world/detail_vegetation_def.json",
