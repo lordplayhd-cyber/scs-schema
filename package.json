@@ -10,13 +10,7 @@
   },
   "author": "DuHNunes",
   "license": "MIT",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.5.1",
-      "onFail": "download"
-    }
-  },
+  "packageManager": "pnpm@11.5.1",
   "type": "module",
   "devDependencies": {
     "glob": "^13.0.6"
