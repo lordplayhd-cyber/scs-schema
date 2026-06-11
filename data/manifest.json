@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-11T13:19:47.210Z",
+  "generatedAt": "2026-06-11T14:09:14.236Z",
   "schemas": {
     "animated_model_data": {
       "id": "schemas/def/world/animated_model_data.json",
@@ -37,8 +37,8 @@
       "name": "curve_model",
       "path": "./schemas/def/world/curve_model.json",
       "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@commit/3c92c79462da93a3adfe517d9182206c1434c849/schemas/def/world/curve_model.json",
-      "metaVersion": "0.1.1",
-      "hash": "sha256:f626c9599155cf36e224e2c861dc5bccdeda80afee136410ea73a1564fb6b935",
+      "metaVersion": "0.1.2",
+      "hash": "sha256:f7029887c946a952755336af89ce554fd21ce979b30e18edfd6552e68e077cef",
       "size": 2744,
       "description": ""
     }
