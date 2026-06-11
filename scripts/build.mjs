@@ -64,7 +64,7 @@ async function build(ref = null, { doCommit = true } = {}) {
     const raw = await fs.readFile(file);
     const parsed = JSON.parse(raw.toString('utf8'));
     const repoRoot = path.resolve(__dirname, '..');
-    const relPath = path.relative(repoRoot, path.resolve(p)).replace(/\\/g, '/');
+    const rel = path.relative(repoRoot, path.resolve(p)).replace(/\\/g, '/');
     const key = makeKeyFromRel(rel);
     const computedHash = sha256(raw);
     const computedSize = raw.length;
