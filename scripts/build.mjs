@@ -42,9 +42,10 @@ async function build(ref = null, { doCommit = true } = {}) {
   try {
     const diffOut = execSync(`git diff --name-only ${BASE_REF}..HEAD -- ${SCHEMAS_DIR} || true`, { encoding: 'utf8' }).trim();
     if (diffOut) {
+      const repoRoot = path.resolve(__dirname, '..');
       diffOut.split('\n').map(s => s.trim()).filter(Boolean).forEach(p => {
-        // normalize to path relative to data dir like rel below (e.g. "schemas/def/.../file.json")
-        const relPath = path.relative(DATA_DIR, path.resolve(p)).replace(/\\/g, '/');
+        // normalize to path relative to repo root (same format as rel below, e.g. "data/schemas/def/.../file.json")
+        const relPath = path.relative(repoRoot, path.resolve(p)).replace(/\\/g, '/');
         changedSet.add(relPath);
       });
     }
@@ -77,13 +78,8 @@ async function build(ref = null, { doCommit = true } = {}) {
 
     const existingEntry = manifest.schemas[key];
     const shouldUpdateUrl = changedSet.has(rel) || !existingEntry || !existingEntry.url;
-    let urlValue = shouldUpdateUrl ? `${urlBase}/${rel}` : (existingEntry && existingEntry.url) || ''
-
-    if (urlValue && typeof urlValue === 'string' && urlValue.startsWith('data/https://')) {
-      console.warn('Detect bad url prefix for', rel, '-> forcing recalculation')
-      urlValue = `${urlBase}/${rel}`
-    }
-
+    const urlValue = shouldUpdateUrl ? `${urlBase}/${rel}` : (existingEntry && existingEntry.url) || ''
+    
     manifest.schemas[key] = {
       id: idField,
       name: nameField,
