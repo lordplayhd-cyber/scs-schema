@@ -23,7 +23,7 @@ jobs:
           node-version: 18
       
       - name: Install pnpm globally
-        run: npm i pnpm
+        run: npm i -g pnpm
 
       - name: Install dependencies
         run: pnpm install
