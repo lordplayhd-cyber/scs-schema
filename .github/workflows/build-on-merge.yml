@@ -49,7 +49,14 @@ jobs:
           git fetch --no-tags --prune origin
           pnpm node ./scripts/bump.mjs
       
+      - name: Configure git user for CI
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      
       - name: Build manifest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm build
       
       - name: Commit manifest and package.json if changed
