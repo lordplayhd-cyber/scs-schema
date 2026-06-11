@@ -14,7 +14,7 @@ async function updateFileVersion(filePath, newVersion) {
   catch (e) { throw new Error(`Invalid JSON in ${filePath}: ${e.message}`); }
 
   if (!parsed.meta) parsed.meta = {};
-  if (parsed.meta.version === newVersion) return false; // sem mudança
+  if (parsed.meta.version === newVersion) return false;
   parsed.meta.version = newVersion;
   await fs.writeFile(filePath, JSON.stringify(parsed, null, 2) + '\n', 'utf8');
   return true;
@@ -23,8 +23,13 @@ async function updateFileVersion(filePath, newVersion) {
 async function main() {
   const version = process.argv[2];
   if (!version) {
-    console.error('Usage: node scripts/bump-schemas.mjs <version>');
+    console.error('Usage: node scripts/bump.mjs <version>');
     process.exit(1);
+  }
+
+  try {
+    run('git fetch --tags --no-recurse-submodules --depth=1 origin');
+  } catch {
   }
 
   let baseRef;
@@ -32,16 +37,30 @@ async function main() {
     baseRef = run('git describe --tags --abbrev=0');
     console.log('Previous tag found:', baseRef);
   } catch {
-    baseRef = 'origin/main';
-    console.log('No previous tag found, using', baseRef);
+    baseRef = run('git rev-list --max-parents=0 HEAD');
+    console.log('No previous tag found, using root commit:', baseRef);
   }
 
-  let changed;
+  let changed = [];
   try {
-    changed = run(`git diff --name-only ${baseRef}..HEAD -- data/schemas || true`).split('\n').filter(Boolean);
+    const out = run(`git diff --name-only ${baseRef}..HEAD -- data/schemas`);
+    if (out) changed = out.split('\n').filter(Boolean);
   } catch (e) {
-    console.error('git diff failed:', e);
-    process.exit(1);
+    console.warn('git diff failed, falling back to listing tracked and untracked files in data/schemas');
+  }
+
+
+  if (!changed.length) {
+    try {
+      const tracked = run('git ls-files data/schemas || true').split('\n').filter(Boolean);
+      const untracked = run('git ls-files --others --exclude-standard data/schemas || true').split('\n').filter(Boolean);
+
+      const set = new Set([...tracked, ...untracked]);
+      changed = Array.from(set);
+    } catch (e) {
+      console.error('Failed to list schema files:', e);
+      process.exit(1);
+    }
   }
 
   if (!changed.length) {
@@ -49,7 +68,7 @@ async function main() {
     process.exit(0);
   }
 
-  console.log('Changed schema files:', changed);
+  console.log('Schema files to consider:', changed);
 
   const updated = [];
   for (const f of changed) {
@@ -68,13 +87,14 @@ async function main() {
     process.exit(0);
   }
 
-  // commit changes
+  // commit + push changes
   try {
     run(`git add ${updated.map(f => `"${f}"`).join(' ')}`);
     run(`git commit -m "chore(schema): bump meta.version to ${version} for ${updated.length} file(s)"`);
-    console.log('Committed bumped schema files:', updated.length);
+    run('git push origin HEAD');
+    console.log('Committed and pushed bumped schema files:', updated.length);
   } catch (err) {
-    console.error('Failed to commit bumped files:', err);
+    console.error('Failed to commit/push bumped files:', err);
     process.exit(1);
   }
 }
