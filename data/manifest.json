@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-11T23:10:59.079Z",
+  "generatedAt": "2026-06-11T23:40:05.789Z",
   "schemas": {
     "animated_model_data": {
       "id": "data/schemas/def/world/animated_model_data.json",
@@ -70,6 +70,16 @@
       "metaVersion": "0.1.0",
       "hash": "sha256:5b5fcc0a3cb85a7d65cf13895bb4df951a3f212a8f977523fdc9e13fa5b42bfe",
       "size": 1193,
+      "description": ""
+    },
+    "far_model_def": {
+      "id": "data/schemas/def/world/far_model_def.json",
+      "name": "far_model_def",
+      "path": "./data/schemas/def/world/far_model_def.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@3b3ed36bf34434e9f8e8866631ed632fee6eca5a/data/schemas/def/world/far_model_def.json",
+      "metaVersion": "0.1.0",
+      "hash": "sha256:2dd60808fcff24dcc0cee43b7aafda9b0246566367ed80c266133bdfcb6fcd69",
+      "size": 585,
       "description": ""
     }
   }
