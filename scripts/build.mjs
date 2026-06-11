@@ -62,8 +62,8 @@ async function build(ref = null, { doCommit = true } = {}) {
 
     const raw = await fs.readFile(file);
     const parsed = JSON.parse(raw.toString('utf8'));
-    const repoRoot = path.resolve(__dirname, '..')
-    const rel = path.relative(repoRoot, file).replace(/\\/g, '/')
+    const repoRoot = path.resolve(__dirname, '..');
+    const relPath = path.relative(repoRoot, path.resolve(p)).replace(/\\/g, '/');
     const key = makeKeyFromRel(rel);
     const computedHash = sha256(raw);
     const computedSize = raw.length;
@@ -77,7 +77,12 @@ async function build(ref = null, { doCommit = true } = {}) {
 
     const existingEntry = manifest.schemas[key];
     const shouldUpdateUrl = changedSet.has(rel) || !existingEntry || !existingEntry.url;
-    const urlValue = shouldUpdateUrl ? `${urlBase}/${rel}` : (existingEntr && existingEntry.url) || ''
+    let urlValue = shouldUpdateUrl ? `${urlBase}/${rel}` : (existingEntry && existingEntry.url) || ''
+
+    if (urlValue && typeof urlValue === 'string' && urlValue.startsWith('data/https://')) {
+      console.warn('Detect bad url prefix for', rel, '-> forcing recalculation')
+      urlValue = `${urlBase}/${rel}`
+    }
 
     manifest.schemas[key] = {
       id: idField,
