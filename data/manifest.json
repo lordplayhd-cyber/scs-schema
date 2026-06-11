@@ -1,5 +1,16 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-11T01:14:13.558Z",
-  "schemas": {}
+  "generatedAt": "2026-06-11T01:18:00.028Z",
+  "schemas": {
+    "animated_model_data": {
+      "id": "schemas/def/world/animated_model_data.json",
+      "name": "animated_model_data",
+      "path": "./schemas/def/world/animated_model_data.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@commit/440b64c2e013c78d607db38f71382b29050914bf/schemas/def/world/animated_model_data.json",
+      "metaVersion": "0.1.1",
+      "hash": "sha256:ed24474d3ba815192952f6150223dab417e8c3b5b1bfd3744829ba104420a9d3",
+      "size": 937,
+      "description": ""
+    }
+  }
 }
