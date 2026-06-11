@@ -22,8 +22,13 @@ jobs:
         with:
           node-version: 18
       
-      - name: Install pnpm globally
-        run: npm i -g pnpm
+      - name: Install pnpm globally and persist path
+        run: |
+          npm i -g pnpm
+          echo "npm bin -g: $(npm bin -g)"
+          echo "$(npm bin -g)" >> $GITHUB_PATH
+          # sanity check
+          pnpm -v
 
       - name: Install dependencies
         run: pnpm install
