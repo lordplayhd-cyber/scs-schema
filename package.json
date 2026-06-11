@@ -6,8 +6,7 @@
     "verify": "node ./scripts/verify.mjs",
     "build": "pnpm i && node ./scripts/build.mjs",
     "bump": "node ./scripts/bump.mjs",
-    "compile": "pnpm i && pnpm verify && pnpm bump && pnpm build",
-    "release": "release-it"
+    "compile": "pnpm i && pnpm verify && pnpm bump && pnpm build"
   },
   "author": "DuHNunes",
   "license": "MIT",
@@ -15,11 +14,5 @@
   "type": "module",
   "devDependencies": {
     "glob": "^13.0.6"
-  },
-  "dependencies": {
-    "@commitlint/cli": "^21.0.2",
-    "@commitlint/config-conventional": "^21.0.2",
-    "@release-it/conventional-changelog": "^11.0.1",
-    "release-it": "^20.2.0"
   }
 }
