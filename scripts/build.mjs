@@ -83,7 +83,7 @@ async function build(ref = null, { doCommit = true } = {}) {
       id: idField,
       name: nameField,
       path: pathField,
-      url: urlValue,
+      url: `data/${urlValue}`,
       metaVersion,
       hash: computedHash,
       size: computedSize,
