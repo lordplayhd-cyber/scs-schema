@@ -1,12 +1,12 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-11T10:06:04.039Z",
+  "generatedAt": "2026-06-11T12:20:11.583Z",
   "schemas": {
     "animated_model_data": {
       "id": "schemas/def/world/animated_model_data.json",
       "name": "animated_model_data",
       "path": "./schemas/def/world/animated_model_data.json",
-      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@commit/2c2e91b96aa993c558789f70e576203fccca0db5/schemas/def/world/animated_model_data.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@commit/8893261294c6b9bea93edff5625be9baa4b85216/schemas/def/world/animated_model_data.json",
       "metaVersion": "0.1.1",
       "hash": "sha256:ed24474d3ba815192952f6150223dab417e8c3b5b1bfd3744829ba104420a9d3",
       "size": 937,
@@ -16,7 +16,7 @@
       "id": "schemas/def/world/building_model.json",
       "name": "building_model",
       "path": "./schemas/def/world/building_model.json",
-      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@commit/2c2e91b96aa993c558789f70e576203fccca0db5/schemas/def/world/building_model.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@commit/8893261294c6b9bea93edff5625be9baa4b85216/schemas/def/world/building_model.json",
       "metaVersion": "0.1.1",
       "hash": "sha256:5451dac78634dcffce488a5db5b1f8f7157c44d3f58aef0d7cee6fdabbbdfbad",
       "size": 2261,
