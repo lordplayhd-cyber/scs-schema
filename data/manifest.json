@@ -1,6 +1,6 @@
 {
-  "version": "858f88daaaebebfd79b490f66745f0482b78a55f",
-  "generatedAt": "2026-06-10T20:35:24.533Z",
+  "version": "ec9ae159ef3ea82571548ff821ec393ba15e626f",
+  "generatedAt": "2026-06-11T00:17:57.842Z",
   "schemas": {
     "animated_model_data": {
       "id": "schemas/def/world/animated_model_data.json",
