@@ -77,13 +77,13 @@ async function build(ref = null, { doCommit = true } = {}) {
 
     const existingEntry = manifest.schemas[key];
     const shouldUpdateUrl = changedSet.has(rel) || !existingEntry || !existingEntry.url;
-    const urlValue = shouldUpdateUrl ? `data/${urlBase}/${rel}` : (existingEntry && existingEntry.url) || '';
+    const urlValue = shouldUpdateUrl ? `${urlBase}/${rel}` : (existingEntr && existingEntry.url) || ''
 
     manifest.schemas[key] = {
       id: idField,
       name: nameField,
       path: pathField,
-      url: data/urlValue,
+      url: urlValue,
       metaVersion,
       hash: computedHash,
       size: computedSize,
