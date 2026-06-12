@@ -10,14 +10,14 @@ Thanks for helping improve the schema database used by the <a href="https://gith
 - **Required top-level fields**: `meta`, `scope`, `key`
 - **Versioning**: start with `meta.version: 0.1.0`
 
-## File location nd path structure
+## File location and path structure
 **Files must mirror the game's folder structure.**  
 Place each `class_name.json` under `data/schemas/` using the same relative path used by the game `.sii` files.
 
 - Example: the game file `/def/world/prefab_model.sii` -> schema file `data/schemas/def/world/prefab_model.json`.
 - Example: `/def/world/curve_model.sii` -> `data/schemas/def/world/curve_model.json`
 
-This rule helps the extension map schemas to `.sii` files and keeps the DB organized. If you are unsure about the correct path, include the original `.sii` snippet in your PR description.
+This rule helps the extension map schemas to `.sii` files and keeps the DB organized.
 
 ## File format and field rules
 - **meta**
@@ -36,35 +36,76 @@ This rule helps the extension map schemas to `.sii` files and keeps the DB organ
 **Important**: keep `type` and `arrayElementType` consistent: If a key exists both as scalar and array, reflect both forms (scalar `type` and `isArray: true` with `arrayElementType`).
 
 ### Examples
+#### With scalar & not array
+```sii
+SiiNunit {
+  model_def : unit.name {
+    name: "name"
+  }
+}
+```
 ```json
-"bone_a": {
-  "description": "name of the bone",
-  "type": ["token"],
+"name": {
+  "description": "",
+  "type": ["string"],
   "isArray": false,
   "arrayElementType": null
 }
 ```
-#### Array-only key:
-```json
-"radius_time": {
-  "description": "(radius, anim_time) paris - must be sorted according to radius!",
-  "type": null,
-  "isArray": true,
-  "arrayElementType": ["float2"]
-}
-```
-#### with SII real file `vegetation_data.sii`
+#### With scalar and array key:
 ```sii
-// Using type = null
 SiiNunit {
-  vegetation_data : unit.name {
-    name: ""  // type: ["string"] & arrayElementType: null
-    model[]: ""  // type: null & arrayElementType: ["token"]
-    min_offset: 1 or 1.0 // type: ["fixed", "float"] & arrayElementType: null
+  model_def : unit.name {
+    dynamic_lod_desc: 2
+    dynamic_lod_desc[0]: "/path/to/file.pmd"
+    dynamic_lod_desc[1]: "/path/to/file.pmd"
   }
 }
 ```
-## Vlidation (what expect from contributors)
+```json
+"dynamic_lod_desc": {
+  "description": "",
+  "type": ["fixed"],
+  "isArray": true,
+  "arrayElementType": ["resource_tie"]
+}
+```
+#### With array & not scalar:
+```sii
+SiiNunit {
+  mover_action : unit.name {
+    timer_params[]: ""
+  }
+}
+```
+```json
+"timer_params": {
+  "description": "",
+  "type": null,
+  "isArray": true,
+  "arrayElementType": ["string"]
+}
+```
+#### With double type
+```sii
+SiiNunit {
+  road_edge : unit.name {
+    width: 1
+    # or
+    width: 1.0
+  }
+}
+```
+```json
+"width": {
+  "description": "",
+  "type": ["fixed", "float"],
+  "isArray": false,
+  "arrayElementType": null
+}
+```
+
+## Validation (what expect from contributors)
 This project only requires that contributed files re valid JSON and follow the structure described above. Before opening a PR:
 - Make sure the file pth mirrors the gme path (see File loction nd path structure)
 - Ensure scope mtches the filename (bsename whtout .json)
@@ -72,13 +113,14 @@ This project only requires that contributed files re valid JSON and follow the s
 
 ## PR workflow
 1. **Fork** (if needed) and create a descriptive branch: `feat/add-<class_name>`
-2. **Commit messages**: use conventional style, e.g. `feat(schema): add <class_name>` or `fix(schema): correct <class_name>`.
+2. **Commit messages**: use conventional style, e.g. `feat(schema): add <class_name>` or `fix(schema): correct <class_name>`
+  - `git add .`
+  - `git commit -m "feat(schemas): add <class_name>.json"`
 3. **Open PR**: include a short summary, example `.sii` snippets tht justify keys, and the checklist below.
-
+  - `gh pr create` - and follow terminal
 ## Checklist before PR
 - [x] Filename matches `class_name` (e.g., `prefab_model.json)
 - [x] Schema file placed in the same relative path as the game `.sii` (e.g. `data/schemas/def/world/prefab_model.json` for `/def/world/prefab_model.sii`)
 - [x] `meta.version` set (stat with `"0.1.0"`)
 - [x] `scope` equals `class_name`
 - [x] Every `key` has `description`, `type`, `isArray`, `arrayElementType`
-
