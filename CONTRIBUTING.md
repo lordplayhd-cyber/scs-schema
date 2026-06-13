@@ -108,7 +108,7 @@ SiiNunit {
 ```
 
 ## Validation (what expect from contributors)
-This project only requires that contributed files re valid JSON and follow the structure described above. Before opening a PR:
+This project only requires that contributed files are valid JSON and follow the structure described above. Before opening a PR:
 - Make sure the file pth mirrors the gme path (see File loction nd path structure)
 - Ensure scope mtches the filename (bsename whtout .json)
 - No additional tooling or build steps are required for content-only contributions.
@@ -117,11 +117,11 @@ This project only requires that contributed files re valid JSON and follow the s
 1. **Fork** (if needed) and create a descriptive branch: `feat/add-<class_name>`
 2. **Sync your branch**: run `git pull` to update before staging changes.
 3. **Stage and commit**;
-  - `git add .`
-  - `git commit -m "feat(schemas): add <class_name>.json"`
-    - Use conventional style, e.g. `feat(schema): add <class_name>` or `fix(schema): fix <class_name>`
-4. **Open PR**: include a short summary, example `.sii` snippets that justify keys, and the checklist below.
-  - `gh pr create` - and follow the terminal prompts
+    - `git add .`
+    - `git commit -m "feat(schemas): add <class_name>.json"`
+      - Use conventional style, e.g. `feat(schema): add <class_name>` or `fix(schema): fix <class_name>`
+4. **Open PR**: include a short summary (with [GH CLI](https://cli.github.com/))
+    - `gh pr create` - and follow the terminal prompts
 
 > [!IMPORTANT]  
 > Always run `git pull` before staging changes (`git add .`).
