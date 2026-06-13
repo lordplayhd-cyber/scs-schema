@@ -7,42 +7,32 @@
   "key": {
     "name": {
       "description": "This is the name from your prefab.",
+      "type": ["string"],
       "isArray": false,
-      "type": [
-        "string"
-      ],
       "arrayElementType": null
     },
     "model": {
       "description": "/path/to/file.pmd",
+      "type": ["resource_tie"],
       "isArray": false,
-      "type": [
-        "resource_tie"
-      ],
       "arrayElementType": null
     },
     "animations": {
       "description": "/path/to/file.pma",
-      "isArray": true,
       "type": null,
-      "arrayElementType": [
-        "resource_tie"
-      ]
+      "isArray": true,
+      "arrayElementType": ["resource_tie"]
     },
     "probability_day": {
       "description": "",
+      "type": ["float"],
       "isArray": false,
-      "type": [
-        "float"
-      ],
       "arrayElementType": null
     },
     "probability_night": {
       "description": "",
+      "type": ["float"],
       "isArray": false,
-      "type": [
-        "float"
-      ],
       "arrayElementType": null
     }
   }
