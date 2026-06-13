@@ -17,7 +17,7 @@
         },
         "description": {
           "type": "string",
-          "description": "Description used by completion tooling.\n\nProvides contextual information for the key, enabling better suggestions in the extension. This field is required in every file and should contain a concise explanation of the key's purpose."
+          "description": "Description used by completion tooling.\n\nProvides contextual information for the class_name, enabling better suggestions in the extension. This field is required in every file and should contain a concise explanation of the class_name's purpose."
         }
       },
       "additionalProperties": false
