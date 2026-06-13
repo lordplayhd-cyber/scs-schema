@@ -114,6 +114,7 @@ This project only requires that contributed files re valid JSON and follow the s
 ## PR workflow
 1. **Fork** (if needed) and create a descriptive branch: `feat/add-<class_name>`
 2. **Commit messages**: use conventional style, e.g. `feat(schema): add <class_name>` or `fix(schema): correct <class_name>`
+  - `git pull` : you **NEED** run `git pull` before `git add .` because repo have auto update `manifest.json` and bump versions from schemas.
   - `git add .`
   - `git commit -m "feat(schemas): add <class_name>.json"`
 3. **Open PR**: include a short summary, example `.sii` snippets tht justify keys, and the checklist below.
