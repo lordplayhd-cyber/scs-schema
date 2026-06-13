@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-13T13:07:34.806Z",
+  "generatedAt": "2026-06-13T17:37:31.379Z",
   "schemas": {
     "animated_model_data": {
       "id": "data/schemas/def/world/animated_model_data.json",
@@ -190,6 +190,36 @@
       "metaVersion": "0.1.0",
       "hash": "sha256:9ebcdc73c087969d4cd22a7e1eed60072cae801f3f584f9a86c858b1f6e2e64c",
       "size": 1084,
+      "description": ""
+    },
+    "mover_anim": {
+      "id": "data/schemas/def/world/mover_anim.json",
+      "name": "mover_anim",
+      "path": "./data/schemas/def/world/mover_anim.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@56be31f5ce208c27b85d2d81642bd733e7352abf/data/schemas/def/world/mover_anim.json",
+      "metaVersion": "0.1.0",
+      "hash": "sha256:ca9db6a54e0fcc68eb1ce244243ae45c60a686ad44bc0757eafddd79d1558449",
+      "size": 816,
+      "description": ""
+    },
+    "mover_desc": {
+      "id": "data/schemas/def/world/mover_desc.json",
+      "name": "mover_desc",
+      "path": "./data/schemas/def/world/mover_desc.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@56be31f5ce208c27b85d2d81642bd733e7352abf/data/schemas/def/world/mover_desc.json",
+      "metaVersion": "0.1.0",
+      "hash": "sha256:0dc588b381b65fb624ffd653fd1b5707d194acc3ad78869e3501fa0729acc05a",
+      "size": 971,
+      "description": ""
+    },
+    "mover_model": {
+      "id": "data/schemas/def/world/mover_model.json",
+      "name": "mover_model",
+      "path": "./data/schemas/def/world/mover_model.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@56be31f5ce208c27b85d2d81642bd733e7352abf/data/schemas/def/world/mover_model.json",
+      "metaVersion": "0.1.0",
+      "hash": "sha256:eada1a3a1d1717fc4826e1e6b853aed6f41e6d2505da2c0db8827c4cdddb537c",
+      "size": 1044,
       "description": ""
     }
   }
