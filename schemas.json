@@ -48,8 +48,31 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "enum": [
-                      "string", "float", "float2", "float3", "float4", "placement", "fixed", "fixed2", "fixed3", "fixed4", "int2", "quaternion", "s16", "s32", "s64", "u16", "u32", "u64", "bool", "token", "owner_ptr", "link_ptr", "resource_tie"
+                    "oneOf": [
+                      { "const": "string", "description": "Plain text value | e.g., key: \"x\"" },
+                      { "const": "float", "description": "Sigle float number | e.g., key: x or HEXieee754: &3f800000" },
+                      { "const": "float2", "description": "Vector of 2 floats | e.g., key: (x, y)" },
+                      { "const": "float3", "description": "Vector of 3 floats | e.g., key: (x, y, z)" },
+                      { "const": "float4", "description": "Vector of 4 floats | e.g., key: (x, y, z, w)" },
+                      { "const": "placement", "description": "Placement transform | e.g., key: (x, y, z)(w; x, y, z)" },
+                      { "const": "fixed", "description": "Fixed-point number | e.g., key: x" },
+                      { "const": "fixed2", "description": "Vector of 2 fixed-point numbers | e.g., key: (x, y)" },
+                      { "const": "fixed3", "description": "Vector of 3 fixed-point numbers | e.g., key: (x, y, z)" },
+                      { "const": "fixed4", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
+                      { "const": "int2", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
+                      { "const": "int2", "description": "Vector of 2 integer | e.g., key: (x, y)" },
+                      { "const": "quaternion", "description": "Quaternion rotation | e.g., key: (w, x, y, z)" },
+                      { "const": "s16", "description": "Signed 16-bit integer | e.g., key: x" },
+                      { "const": "s32", "description": "Signed 32-bit integer | e.g., key: x" },
+                      { "const": "s64", "description": "Signed 64-bit integer | e.g., key: x" },
+                      { "const": "u16", "description": "Unsigned 16-bit integer | e.g., key: x" },
+                      { "const": "u32", "description": "Unsigned 32-bit integer | e.g., key: x" },
+                      { "const": "u64", "description": "Unsigned 64-bit integer | e.g., key: x" },
+                      { "const": "bool", "description": "Boolean flag | e.g., true|false" },
+                      { "const": "token", "description": "Token is a string of maximum length of 12 characters, only lowercase alphanumeric characters and underscore can be used \"[a-z0-9-]\"" },
+                      { "const": "owner_ptr", "description": "\"owner_ptr\" refers to unit defined within the same SiiNunit | e.g., \".tailer.tchassis\"" },
+                      { "const": "link_ptr", "description": "\"link_ptr\" refers to a named unit that is defined elsewhere (e.g., \"cabin_a.brand.model.cabin\"" },
+                      { "const": "resource_tie", "description": "\"resource_tie\" is typically used to bind animations to animated models. The syntax is the same as for 'string' type key" }
                     ]
                   },
                   "minItems": 1
@@ -68,8 +91,31 @@
                   "type": "array",
                   "items": {
                     "type": "string",
-                    "enum": [
-                      "string", "float", "float2", "float3", "float4", "placement", "fixed", "fixed2", "fixed3", "fixed4", "int2", "quaternion", "s16", "s32", "s64", "u16", "u32", "u64", "bool", "token", "owner_ptr", "link_ptr", "resource_tie"
+                    "oneOf": [
+                      { "const": "string", "description": "Plain text value | e.g., key: \"x\"" },
+                      { "const": "float", "description": "Sigle float number | e.g., key: x or HEXieee754: &3f800000" },
+                      { "const": "float2", "description": "Vector of 2 floats | e.g., key: (x, y)" },
+                      { "const": "float3", "description": "Vector of 3 floats | e.g., key: (x, y, z)" },
+                      { "const": "float4", "description": "Vector of 4 floats | e.g., key: (x, y, z, w)" },
+                      { "const": "placement", "description": "Placement transform | e.g., key: (x, y, z)(w; x, y, z)" },
+                      { "const": "fixed", "description": "Fixed-point number | e.g., key: x" },
+                      { "const": "fixed2", "description": "Vector of 2 fixed-point numbers | e.g., key: (x, y)" },
+                      { "const": "fixed3", "description": "Vector of 3 fixed-point numbers | e.g., key: (x, y, z)" },
+                      { "const": "fixed4", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
+                      { "const": "int2", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
+                      { "const": "int2", "description": "Vector of 2 integer | e.g., key: (x, y)" },
+                      { "const": "quaternion", "description": "Quaternion rotation | e.g., key: (w, x, y, z)" },
+                      { "const": "s16", "description": "Signed 16-bit integer | e.g., key: x" },
+                      { "const": "s32", "description": "Signed 32-bit integer | e.g., key: x" },
+                      { "const": "s64", "description": "Signed 64-bit integer | e.g., key: x" },
+                      { "const": "u16", "description": "Unsigned 16-bit integer | e.g., key: x" },
+                      { "const": "u32", "description": "Unsigned 32-bit integer | e.g., key: x" },
+                      { "const": "u64", "description": "Unsigned 64-bit integer | e.g., key: x" },
+                      { "const": "bool", "description": "Boolean flag | e.g., true|false" },
+                      { "const": "token", "description": "Token is a string of maximum length of 12 characters, only lowercase alphanumeric characters and underscore can be used \"[a-z0-9-]\"" },
+                      { "const": "owner_ptr", "description": "\"owner_ptr\" refers to unit defined within the same SiiNunit | e.g., \".tailer.tchassis\"" },
+                      { "const": "link_ptr", "description": "\"link_ptr\" refers to a named unit that is defined elsewhere (e.g., \"cabin_a.brand.model.cabin\"" },
+                      { "const": "resource_tie", "description": "\"resource_tie\" is typically used to bind animations to animated models. The syntax is the same as for 'string' type key" }
                     ]
                   },
                   "minItems": 1
