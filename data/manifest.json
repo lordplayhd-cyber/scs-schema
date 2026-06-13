@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-06-12T23:11:57.470Z",
+  "generatedAt": "2026-06-13T10:15:53.367Z",
   "schemas": {
     "animated_model_data": {
       "id": "data/schemas/def/world/animated_model_data.json",
@@ -180,6 +180,16 @@
       "metaVersion": "0.1.0",
       "hash": "sha256:90bc2100cab01905b9bd4c1c0f03a10f15739fb9051a2e69324f2dcbe035e684",
       "size": 1958,
+      "description": ""
+    },
+    "mover_action": {
+      "id": "data/schemas/def/world/mover_action.json",
+      "name": "mover_action",
+      "path": "./data/schemas/def/world/mover_action.json",
+      "url": "https://cdn.jsdelivr.net/gh/duhnunes/scs-schema@ebeef3b3908cc3298a439601d990aed9a351514d/data/schemas/def/world/mover_action.json",
+      "metaVersion": "0.1.0",
+      "hash": "sha256:9ebcdc73c087969d4cd22a7e1eed60072cae801f3f584f9a86c858b1f6e2e64c",
+      "size": 1084,
       "description": ""
     }
   }
