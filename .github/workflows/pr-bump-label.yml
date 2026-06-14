@@ -28,4 +28,4 @@ jobs:
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.repository }}/dispatches \
-            -d '{"event_type": "bump-level-applied", "client_payload": { "pr_number": ${{ github.event.pull_request.number }}}}'
+            -d '{"event_type": "bump-lebel-applied", "client_payload": { "pr_number": ${{ github.event.pull_request.number }}}}'
