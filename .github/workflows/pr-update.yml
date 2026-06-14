@@ -1,4 +1,4 @@
-name: CI: bump, verify and build on PR
+name: CI bump, verify and build on PR
 
 on:
   pull_request_target:
