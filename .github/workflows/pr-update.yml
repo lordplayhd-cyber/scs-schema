@@ -29,6 +29,12 @@ jobs:
           echo "is_draft=$(echo "$pr_json" | jq -r '.draft')" >> $GITHUB_OUTPUT
           echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
 
+      - name: Debug PR info
+        run: |
+          echo "PR_NUMBER=${{ steps.get_pr.outputs.pr_number }}"
+          echo "HEAD_REPO=${{ steps.get_pr.outputs.head_repo }}"
+          echo "HEAD_REF=${{ steps.get_pr.outputs.head_ref }}"
+
       - name: Stop if PR is draft
         if: steps.get_pr.outputs.is_draft == 'true'
         run: |
@@ -105,12 +111,16 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bump
+          issue_number: ${{ steps.get_pr.outputs.pr_number }}
+          repository: ${{ steps.get_pr.outputs.head_repo }}
 
       - name: Add label BUMPED
         uses: actions-ecosystem/action-add-labels@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bumped
+          issue_number: ${{ steps.get_pr.outputs.pr_number }}
+          repository: ${{ steps.get_pr.outputs.head_repo }}
 
       - name: Comment on PR with summary
         if: always()
