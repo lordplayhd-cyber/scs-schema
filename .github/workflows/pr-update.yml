@@ -1,10 +1,8 @@
 name: PR schema automation
 
 on:
-  repository_dispatch:
-    types: [bump-label-applied]
   pull_request:
-    types: [synchronize]
+    types: [closed]
 
 permissions:
   contents: write
@@ -12,21 +10,9 @@ permissions:
   issues: write
 
 jobs:
-  check-only:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-      - name: Debug synchronize
-        run: echo "runing in synchronize"
-
   update-schemas:
     runs-on: ubuntu-latest
-    if: github.event_name == 'repository_dispatch' && !contains(github.event.head_commit.message, '[auto-scs]')
+    if: github.event.pull_request.merged == true
     steps:
       - name: Get PR info from payload
         id: get_pr
