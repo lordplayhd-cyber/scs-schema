@@ -56,12 +56,20 @@ jobs:
             echo "manifest_changed=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Compute merge-base for diff
+        id: mergebase
+        run: |
+          # fetch base branch
+          git fetch origin master:refs/remotes/origin/master || true
+          # compute merge-base between PR head and base branch
+          BASE=$(git merge-base origin/master HEAD || true)
+          echo "base_ref=$BASE" >> $GITHUB_OUTPUT
+
       - name: Run bump script (bump meta.version for edited schemas)
         id: bump
         env:
-          BASE_REF: origin/master
+          BASE_REF: ${{ steps.mergebase.outputs.base_ref }}
         run: |
-          # bump.mjs will detect changed schema files and bump meta.version
           node ./scripts/bump.mjs || true
           # stage any modified schema files
           git add data/schemas || true
