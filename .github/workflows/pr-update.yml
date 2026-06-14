@@ -21,20 +21,19 @@ jobs:
       - name: Checkout PR branch (full history)
         uses: actions/checkout@v4
         with:
-          # checkout the PR head ref so we can commit back to it
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
-      - name: Ensure depencendies (semver)
+
+      - name: Ensure dependencies (semver)
         run: |
           npm i
-      
+
       - name: Configure git user
         run: |
           git config user.name "${{ github.actor }}"
@@ -71,7 +70,7 @@ jobs:
           else
             echo "bumped=false" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Build manifest with jsDelivr URLs using current commit SHA
         id: build
         run: |
@@ -82,19 +81,20 @@ jobs:
           node ./scripts/build.mjs "$REF"
           git add data/manifest.json || true
           if ! git diff --staged --quiet; then
-            git commit -m "chore(build): build manifest with jsDelivr URLs @${REF}" || true
-            echo "built=false" >> $GITHUB_OUTPUT
+            git commit -m "chore: build manifest with jsDelivr URLs @${REF}" || true
+            echo "built=true" >> $GITHUB_OUTPUT
           else
             echo "built=false" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Push changes back to PR branch (if any)
-        if: stepts.verify.outputs.manifest_changed == 'true' || steps.bump.outputs.bumped == 'true' || steps.build.outputs.built == 'true'
+        if: steps.verify.outputs.manifest_changed == 'true' || steps.bump.outputs.bumped == 'true' || steps.build.outputs.built == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # push to the PR head branch
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
-      
+
       - name: Comment on PR with summary
         if: always()
         uses: actions/github-script@v7
@@ -102,19 +102,18 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr = context.payload.pull_request;
-            const changed = []
-            if (process.env.MANIFEST_CHANGED === 'true') changed.push('manifest updated')
-            if (process.env.BUMPED === 'true') changed.push('schema version bumped')
-            if (process.env.built === 'true') changed.push('manifest rebuilt with jsDelivr URLs')
+            const changed = [];
+            if (process.env.MANIFEST_CHANGED === 'true') changed.push('manifest updated');
+            if (process.env.BUMPED === 'true') changed.push('schema versions bumped');
+            if (process.env.BUILT === 'true') changed.push('manifest rebuilt with jsDelivr URLs');
             const body = `Automated schema check completed. Changes: ${changed.length ? changed.join(', ') : 'no changes needed'}.`;
             await github.issues.createComment({
               owner: context.repo.owner,
-              repo: context.repo.repo
+              repo: context.repo.repo,
               issue_number: pr.number,
               body
             })
-          env:
-            MANIFEST_CHANGED: ${{ steps.verify.outputs.manifest_changed || 'false' }}
-            BUMPED: ${{ steps.bump.outputs.bumped || 'false' }}
-            BUILT: ${{ steps.build.outputs.built || 'false' }}    
-    
+        env:
+          MANIFEST_CHANGED: ${{ steps.verify.outputs.manifest_changed || 'false' }}
+          BUMPED: ${{ steps.bump.outputs.bumped || 'false' }}
+          BUILT: ${{ steps.build.outputs.built || 'false' }}
