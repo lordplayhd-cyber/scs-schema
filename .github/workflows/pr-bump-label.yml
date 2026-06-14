@@ -19,13 +19,13 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bump
-      
+
       - name: Trigger pr-update workflow
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -X POST \
+          curl -sS -X POST \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/${{ github.repository }}/dispatches \
-            -d '{"event_type": "bump-lebel-applied", "client_payload": { "pr_number": ${{ github.event.pull_request.number }}}}'
+            -d '{"event_type":"bump-label-applied","client_payload":{"pr_number":'${{ github.event.pull_request.number }}'}}'

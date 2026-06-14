@@ -12,27 +12,45 @@ permissions:
 jobs:
   update-schemas:
     runs-on: ubuntu-latest
-    if: >
-      github.event.label != null &&
-      github.event.label.name == 'bump' &&
-      github.event.pull_request != null &&
-      github.event.pull_request.draft == false
     steps:
-      - name: Checkout repositry base
+      - name: Get PR info from payload
+        id: get_pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          PR_NUMBER: ${{ github.event.client_payload.pr_number }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/${OWNER}/${REPO}/pulls/${PR_NUMBER}"
+          pr_json=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" "$API")
+          echo "head_repo=$(echo "$pr_json" | jq -r '.head.repo.full_name')" >> $GITHUB_OUTPUT
+          echo "head_ref=$(echo "$pr_json" | jq -r '.head.ref')" >> $GITHUB_OUTPUT
+          echo "is_draft=$(echo "$pr_json" | jq -r '.draft')" >> $GITHUB_OUTPUT
+          echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
+
+      - name: Stop if PR is draft
+        if: steps.get_pr.outputs.is_draft == 'true'
+        run: |
+          echo "PR is draft; exiting."
+          exit 0
+
+      - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref || github.event.client_payload.pr_number }}
-          fetch-depth: 0
+          repository: ${{ steps.get_pr.outputs.head_repo }}
+          ref: ${{ steps.get_pr.outputs.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+          fetch-depth: 0
+
       - name: Set up Node.JS
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Install dependencies
         run: npm i
-      
+
       - name: Run verify script (update manifest entries for new files)
         id: verify
         env:
@@ -47,8 +65,8 @@ jobs:
           else
             echo "manifest_changed=false" >> $GITHUB_OUTPUT
           fi
-        
-      - name: Run bump script (bum meta.version for edited schemas)
+
+      - name: Run bump script (bump meta.version for edited schemas)
         id: bump
         env:
           BASE_REF: origin/master
@@ -61,8 +79,7 @@ jobs:
           else
             echo "bumped=false" >> $GITHUB_OUTPUT
           fi
-        
-      
+
       - name: Build manifest with jsDelivr URLs using current commit SHA
         id: build
         run: |
@@ -75,54 +92,54 @@ jobs:
           else
             echo "build=false" >> $GITHUB_OUTPUT
           fi
-        
+
       - name: Push changes back to PR branch (if any)
         if: steps.verify.outputs.manifest_changed == 'true' || steps.bump.outputs.bumped == 'true' || steps.build.outputs.build == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-        
+          git push origin HEAD:${{ steps.get_pr.outputs.head_ref }}
+
       - name: Remove label BUMP
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bump
-      
+
       - name: Add label BUMPED
         uses: actions-ecosystem/action-add-labels@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bumped
-          
+
       - name: Comment on PR with summary
         if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ steps.get_pr.outputs.pr_number }}
           MANIFEST_CHANGED: ${{ steps.verify.outputs.manifest_changed || 'false' }}
           BUMPED: ${{ steps.bump.outputs.bumped || 'false' }}
           BUILD: ${{ steps.build.outputs.build || 'false' }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
         run: |
           PR=${PR_NUMBER}
           CHANGES=()
           if [ "$MANIFEST_CHANGED" = "true" ]; then CHANGES+=("manifest updated"); fi
           if [ "$BUMPED" = "true" ]; then CHANGES+=("schema versions bumped"); fi
-          if [ "$BUILD" = "true" ]; then CHANGES+=("manifest rebuild with jsDelivr URLs"); fi
+          if [ "$BUILD" = "true" ]; then CHANGES+=("manifest rebuilt with jsDelivr URLs"); fi
 
-          if [ ${#CHANGES[@]} -gt 0]; then
+          if [ ${#CHANGES[@]} -gt 0 ]; then
             BODY="Automated schema check completed. Changes: ${CHANGES[*]}."
           else
             BODY="Automated schema check completed. Changes: no changes needed."
           fi
 
           PAYLOAD=$(jq -nc --arg body "$BODY" '{body:$body}')
-          OWNER="${{ github.repository_owner }}"
-          REPO="${{ github.event.repository.name }}"
           API="https://api.github.com/repos/${OWNER}/${REPO}/issues/${PR}/comments"
 
           curl -sS -X POST \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accepts: application/vnd.github+json" \
+            -H "Accept: application/vnd.github+json" \
             "$API" \
             -d "$PAYLOAD"
