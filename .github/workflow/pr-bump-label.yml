@@ -1,0 +1,19 @@
+name: Add bump label to PRs
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  add-bump-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add bump label
+        uses: actions/ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: bump
+          
