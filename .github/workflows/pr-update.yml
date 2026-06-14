@@ -111,16 +111,16 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bump
-          issue_number: ${{ steps.get_pr.outputs.pr_number }}
-          repository: ${{ steps.get_pr.outputs.head_repo }}
+          number: ${{ steps.get_pr.outputs.pr_number }}
+          repo: ${{ steps.get_pr.outputs.head_repo }}
 
       - name: Add label BUMPED
         uses: actions-ecosystem/action-add-labels@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: bumped
-          issue_number: ${{ steps.get_pr.outputs.pr_number }}
-          repository: ${{ steps.get_pr.outputs.head_repo }}
+          number: ${{ steps.get_pr.outputs.pr_number }}
+          repo: ${{ steps.get_pr.outputs.head_repo }}
 
       - name: Comment on PR with summary
         if: always()
