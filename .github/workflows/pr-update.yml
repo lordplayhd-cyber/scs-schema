@@ -57,10 +57,10 @@ jobs:
       - name: Install dependencies
         run: npm i
 
-      # - name: Configure git
-      #   run: |
-      #     git config user.name ${{ github.actor }}
-      #     git config user.email ${{ github.actor }}@users.noreply.github.com
+      - name: Configure git
+        run: |
+          git config user.name ${{ github.actor }}
+          git config user.email ${{ github.actor }}@users.noreply.github.com
 
       - name: Run verify script (update manifest entries for new files)
         id: verify
@@ -99,13 +99,13 @@ jobs:
           git add data/manifest.json || true
           if ! git diff --staged --quiet; then
             git commit -m "chore(build): build manifest with jsDelivr URLs @${REF} [auto-scs]" || true
-            echo "build=true" >> $GITHUB_OUTPUT
+            echo "built=true" >> $GITHUB_OUTPUT
           else
-            echo "build=false" >> $GITHUB_OUTPUT
+            echo "built=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Push changes back to PR branch (if any)
-        if: steps.verify.outputs.manifest_changed == 'true' || steps.bump.outputs.bumped == 'true' || steps.build.outputs.built == 'true'
+        if: steps.verify.outputs.manifest_changed == 'true' || steps.bump.outputs.bumped == 'true' || s.built == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PERSONAGEL_TOKEN: ${{ secrets.PERSONAL_TOKEN || '' }}
@@ -122,7 +122,7 @@ jobs:
           PR_NUMBER: ${{ steps.get_pr.outputs.pr_number }}
           MANIFEST_CHANGED: ${{ steps.verify.outputs.manifest_changed || 'false' }}
           BUMPED: ${{ steps.bump.outputs.bumped || 'false' }}
-          BUILD: ${{ steps.build.outputs.build || 'false' }}
+          BUILD: ${{ steps.build.outputs.built || 'false' }}
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
         run: |
