@@ -32,7 +32,7 @@
       "minProperties": 0,
       "additionalProperties": false,
       "patternProperties": {
-        "^[A-Za-z_]+$": {
+        "^[A-Za-z0-9_]+$": {
           "type": "object",
           "description": "Represents the attribute name whitin a class_name block of an SCS file.\n\nKeys must consist only of alphabetic characters and underscores, following the allowed identifier pattern. Each key object describes the attribute's semantics, type constraints, and array behavior, ensuring consistent validation and tooling support.",
           "required": ["description", "type", "isArray", "arrayElementType"],
@@ -59,7 +59,6 @@
                       { "const": "fixed2", "description": "Vector of 2 fixed-point numbers | e.g., key: (x, y)" },
                       { "const": "fixed3", "description": "Vector of 3 fixed-point numbers | e.g., key: (x, y, z)" },
                       { "const": "fixed4", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
-                      { "const": "int2", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
                       { "const": "int2", "description": "Vector of 2 integer | e.g., key: (x, y)" },
                       { "const": "quaternion", "description": "Quaternion rotation | e.g., key: (w, x, y, z)" },
                       { "const": "s16", "description": "Signed 16-bit integer | e.g., key: x" },
@@ -103,7 +102,6 @@
                       { "const": "fixed3", "description": "Vector of 3 fixed-point numbers | e.g., key: (x, y, z)" },
                       { "const": "fixed4", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
                       { "const": "int2", "description": "Vector of 4 fixed-point numbers | e.g., key: (x, y, z, w)" },
-                      { "const": "int2", "description": "Vector of 2 integer | e.g., key: (x, y)" },
                       { "const": "quaternion", "description": "Quaternion rotation | e.g., key: (w, x, y, z)" },
                       { "const": "s16", "description": "Signed 16-bit integer | e.g., key: x" },
                       { "const": "s32", "description": "Signed 32-bit integer | e.g., key: x" },
