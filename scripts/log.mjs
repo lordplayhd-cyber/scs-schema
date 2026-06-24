@@ -6,3 +6,9 @@ export function logSummary(stats) {
   console.log(chalk.red(`✘ Removed: ${stats.removed}`))
   console.log(chalk.blue(`ℹ Unchanged: ${stats.unchanged}`))
 }
+
+export function logBuildSummary(stats) {
+  console.log(chalk.yellow(`⚠ URLs updated: ${stats.updated}`))
+  console.log(chalk.blue(`ℹ URTLs unchanged: ${stats.unchanged}`))
+  console.log(chalk.green(`✔ Using ref: ${ref}`))
+}
