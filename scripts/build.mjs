@@ -83,7 +83,7 @@ const argv = process.argv.slice(2)
 let refArg = argv[0] || null
 let verbose = false
 for (const a of argv) {
-  if (a === '--versiobe') verbose = true
+  if (a === '--verbose') verbose = true
   else if (!refArg) refArg = a
 }
 build(refArg).catch(e => { console.error(e.message); process.exit(1) })
