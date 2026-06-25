@@ -81,19 +81,22 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          prsNumbers="${{ steps.prs.outputs.numbers }}"
+          prsNumbers="${{ steps.prs.outputs.number }}"
           for pr in $prsNumbers; do
-            BODY="### ✅  Automated schema check completed"
-            BODY="$BODY**Update logs:**
-            ```
+            BODY=$(cat <<'EOF'
+            ### ✅  Automated schema check completed
+            **Update logs:**
+            ```bash
             $(cat /tmp/update.log)
-            ```"
-            BODY="$BODY**Build logs:**
             ```
+            **Build logs:**
+            ```bash
             $(cat /tmp/build.log)
-            ```"
+            ```
+            EOF
+            )
 
-            PAYLOAD=$(jq -nc --arg body "$BODY" '{body:$body}')
+            $PAYLOAD=$(jq -nc --arg body "$BODY" '{body:$body}')
             API="https://api.github.com/repos/${REPO}/issues/$pr/comments"
 
             curl -sS -X POST \
