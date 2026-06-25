@@ -95,7 +95,7 @@ jobs:
               ```bash
               #build
               ```" \
-              '{body:$body}")
+              '{body:$body}'")
             API="https://api.github.com/repos/${REPO}/issues/$pr/comments"
 
             curl -sS -X POST \
