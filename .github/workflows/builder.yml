@@ -81,7 +81,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          prsNumbers="${{ steps.prs.outputs.number }}"
+          prsNumbers="${{ steps.prs.outputs.numbers }}"
           for pr in $prsNumbers; do
             BODY=$(cat <<'EOF'
             ### ✅  Automated schema check completed
