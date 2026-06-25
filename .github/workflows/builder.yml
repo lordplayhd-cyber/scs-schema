@@ -83,17 +83,19 @@ jobs:
         run: |
           prsNumbers="${{ steps.prs.outputs.numbers }}"
           for pr in $prsNumbers; do
-            BODY="### ✅ Automated schema check completed
-            **Update logs:**
-            ```bash
-            $(cat /tmp/update.log)
-            ```
-            **Build logs:**
-            ```bash
-            $(cat /tmp/build.log)
-            ```
-            "
-            PAYLOAD=$(jq -nc --arg body "$BODY" '{body:$body}')
+            PAYLOAD=$(jq -nc \
+              --arg update "$(cat /tmp/update.log)" \
+              --arg build "$(cat /tmp/build.log)" \
+              --arg body "### ✅ Automated schema check completed
+              **Update logs:**
+              ```bash
+              $update
+              ```
+              **Build logs:**
+              ```bash
+              #build
+              ```" \
+              '{body:$body}")
             API="https://api.github.com/repos/${REPO}/issues/$pr/comments"
 
             curl -sS -X POST \
