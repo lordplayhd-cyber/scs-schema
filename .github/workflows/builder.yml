@@ -104,10 +104,10 @@ jobs:
           done
       
       - name: Add ready-for-merge label
-        uses: actions-ecosystem/action-add-labels@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: ready-for-merge
-          number: ${{ steps.prs.outputs.numbers }}
-          repo: ${{ github.repository }}
-
+        if: steps.prs.outputs.numbers != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for pr in ${{ steps.prs.outputs.numbers }}; do
+            gh pr edit $pr --add-label "ready-for-merge"
+          done
