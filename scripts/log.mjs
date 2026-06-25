@@ -10,5 +10,4 @@ export function logSummary(stats) {
 export function logBuildSummary(stats) {
   console.log(chalk.yellow(`⚠ URLs updated: ${stats.updated}`))
   console.log(chalk.blue(`ℹ URTLs unchanged: ${stats.unchanged}`))
-  console.log(chalk.green(`✔ Using ref: ${ref}`))
 }
