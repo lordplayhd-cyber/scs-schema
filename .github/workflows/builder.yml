@@ -86,15 +86,12 @@ jobs:
             PAYLOAD=$(jq -nc \
               --arg update "$(cat /tmp/update.log)" \
               --arg build "$(cat /tmp/build.log)" \
-              --arg body "### ✅ Automated schema check completed
-              **Update logs:**
-              ```bash
-              $update
-              ```
-              **Build logs:**
-              ```bash
-              #build
-              ```" \
+              --arg body "### ✅ Automated schema check completed  
+              **Update logs:**  
+              $update  
+              **Build logs:**  
+              $build  
+              " \
               '{body:$body}')
             API="https://api.github.com/repos/${REPO}/issues/$pr/comments"
 
