@@ -33,10 +33,17 @@ function getChangedFiles(baseRef, headRef) {
   }
 }
 
-async function build(ref = null) {
+async function build(ref = null, verbose = false) {
   const startBuild = Date.now()
 
-  if (!ref) ref = process.env.REF || gitRevParseHead()
+  if (!ref) {
+    try {
+      ref = process.env.REF || gitRevParseHead()
+    } catch {
+      ref = 'HEAD'
+    }
+  }
+
   const urlBase = `https://cdn.jsdelivr.net/gh/${REPO_USER}/${REPO_NAME}@${ref}`
 
   const manifest = await loadManifest()
@@ -81,10 +88,15 @@ async function build(ref = null) {
 
 // CLI
 const argv = process.argv.slice(2)
-let refArg = argv[0] || null
+let refArg = null
 let verbose = false
+
 for (const a of argv) {
   if (a === '--verbose') verbose = true
   else if (!refArg) refArg = a
 }
-build(refArg).catch(e => { console.error(e.message); process.exit(1) })
+
+build(refArg, verbose).catch(e => {
+  console.error(e)
+  process.exit(1)
+})
