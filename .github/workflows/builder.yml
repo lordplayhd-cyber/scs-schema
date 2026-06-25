@@ -101,11 +101,11 @@ jobs:
               "$API"
           done
       
-      - name: Add ready-for-merge label
+      - name: Add ready label
         if: steps.prs.outputs.numbers != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           for pr in ${{ steps.prs.outputs.numbers }}; do
-            gh pr edit $pr --add-label "ready-for-merge"
+            gh pr edit $pr --add-label "ready"
           done
